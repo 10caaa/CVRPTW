@@ -25,12 +25,6 @@ def swap_move(solution: Solution) -> Solution:
             v2.route[i2] = c1
             v1.load = v1.load - c1.demand + c2.demand
             v2.load = v2.load - c2.demand + c1.demand
-            
-            if not new_solution.is_route_time_feasible(v1) or not new_solution.is_route_time_feasible(v2):
-                v1.route[i1] = c1
-                v2.route[i2] = c2
-                v1.load = v1.load + c1.demand - c2.demand
-                v2.load = v2.load + c2.demand - c1.demand
     
     new_solution.calculate_cost()
     return new_solution
@@ -60,12 +54,6 @@ def relocate_move(solution: Solution) -> Solution:
             else:
                 v2.route.append(client)
             v2.load += client.demand
-            
-            if not new_solution.is_route_time_feasible(v1) or not new_solution.is_route_time_feasible(v2):
-                v2.route.remove(client)
-                v2.load -= client.demand
-                v1.route.insert(i1, client)
-                v1.load += client.demand
     
     new_solution.calculate_cost()
     return new_solution
@@ -84,11 +72,7 @@ def two_opt_move(solution: Solution) -> Solution:
     if len(route) > 3:
         i = random.randint(0, len(route) - 2)
         j = random.randint(i + 1, len(route) - 1)
-        original_segment = vehicle.route[i:j+1].copy()
         vehicle.route[i:j+1] = list(reversed(vehicle.route[i:j+1]))
-        
-        if not new_solution.is_route_time_feasible(vehicle):
-            vehicle.route[i:j+1] = original_segment
     
     new_solution.calculate_cost()
     return new_solution
@@ -238,3 +222,4 @@ def simulated_annealing(
         print(f"Last improvement at iteration: {last_improvement}")
     
     return best_solution
+

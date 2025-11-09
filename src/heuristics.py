@@ -29,7 +29,7 @@ def generate_random_solution(clients: List[Client], depot: Client, num_vehicles:
 
 def generate_nearest_neighbor_solution(clients: List[Client], depot: Client, num_vehicles: int, vehicle_capacity: int) -> Solution:
     vehicles = [Vehicle(vehicle_capacity, i) for i in range(num_vehicles)]
-    unassigned = set(clients)
+    unassigned = clients[:]
     current_vehicle_idx = 0
     
     while unassigned:
@@ -37,28 +37,18 @@ def generate_nearest_neighbor_solution(clients: List[Client], depot: Client, num
         
         if len(vehicle.route) == 0:
             current_position = depot
-            current_time = depot.ready_time
         else:
             current_position = vehicle.route[-1]
-            solution_temp = Solution([vehicle], depot)
-            arrival_times, _, feasible = solution_temp.calculate_route_times(vehicle)
-            if arrival_times:
-                current_time = arrival_times[-1] + current_position.service_time
-            else:
-                current_time = depot.ready_time
         
         best_client = None
         best_distance = float('inf')
         
         for client in unassigned:
             if vehicle.load + client.demand <= vehicle.capacity:
-                travel_time = euclidean_distance(current_position, client)
-                arrival_time = current_time + travel_time
-                
-                if arrival_time <= client.due_time:
-                    if travel_time < best_distance:
-                        best_distance = travel_time
-                        best_client = client
+                distance = euclidean_distance(current_position, client)
+                if distance < best_distance:
+                    best_distance = distance
+                    best_client = client
         
         if best_client:
             vehicle.add_client(best_client)
