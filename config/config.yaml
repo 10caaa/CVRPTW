@@ -1,0 +1,26 @@
+solver:
+  initial_temperature: 2000
+  cooling_rate: 0.999
+  max_iterations: 50000
+  min_temperature: 0.1
+  verbose: true
+
+heuristics:
+  initial_solution_method: "clarke_wright"  # Options: random, nearest_neighbor, clarke_wright
+  local_search_iterations: 100
+  operators:
+    - swap
+    - relocate
+    - two_opt
+    - or_opt
+    - cross_exchange
+
+instance:
+  default_num_vehicles: 5
+  data_path: "instance/VRPLIB/tests/data/"
+
+output:
+  save_plots: true
+  save_results: true
+  results_directory: "results/"
+  plot_directory: "results/plots/"
