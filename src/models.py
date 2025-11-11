@@ -84,6 +84,23 @@ class Solution:
         return f"Solution(cost={self.cost:.2f}, vehicles_used={self.get_num_vehicles_used()}/{len(self.vehicles)})"
 
 
+
+
 def euclidean_distance(node1: Client, node2: Client) -> float:
-    return math.sqrt((node1.x - node2.x)**2 + (node1.y - node2.y)**2)
+    """
+    Calculate Euclidean distance using VRPLIB EUC_2D standard.
+    
+    VRPLIB uses rounded integer distance:
+    d(i,j) = round(sqrt((xi-xj)^2 + (yi-yj)^2))
+    
+    Args:
+        node1: First node
+        node2: Second node
+        
+    Returns:
+        Rounded Euclidean distance (integer for VRPLIB compatibility)
+    """
+    dx = node1.x - node2.x
+    dy = node1.y - node2.y
+    return round(math.sqrt(dx * dx + dy * dy))
 
